@@ -8,6 +8,14 @@ export default withNuxt({
       {
         order: ['script', 'template', 'style']
       }
+    ],
+    'vue/html-self-closing': [
+      'warn',
+      {
+        html: {
+          void: 'any'
+        }
+      }
     ]
   }
 })

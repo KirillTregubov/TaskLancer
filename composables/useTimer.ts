@@ -5,6 +5,7 @@ interface TimerState {
 }
 
 export default function () {
+  // TODO: store elapsedTime as exact time from timestamps, but return approximate time to user by calculating in interval
   const timer = useLocalStorage<TimerState>('timer', {
     isRunning: false,
     elapsedTime: 0,
@@ -17,6 +18,7 @@ export default function () {
       timer.value.isRunning = true
       const startTime = Date.now() - timer.value.elapsedTime
       interval = setInterval(() => {
+        console.log('up')
         timer.value.elapsedTime = Date.now() - startTime
       }, 10)
     } else {
@@ -36,16 +38,22 @@ export default function () {
 
   function saveTimerState() {
     if (timer.value.isRunning) {
+      // TODO: use intermediate variable instead of isRunning so that UI doesn't flash
       toggleTimer()
       timer.value.lastSaved = Date.now()
     }
   }
+
+  // TODO: add Focus management, when unfocused for a long time it breaks
 
   onMounted(() => {
     if (timer.value.lastSaved) {
       const elapsed = Date.now() - timer.value.lastSaved
       timer.value.elapsedTime += elapsed
       timer.value.lastSaved = null
+    }
+
+    if (timer.value.isRunning) {
       timer.value.isRunning = false
       toggleTimer()
     }
