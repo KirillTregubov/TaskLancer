@@ -1,3 +1,5 @@
+import pkg from './package.json'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -20,6 +22,11 @@ export default defineNuxtConfig({
         { rel: 'preconnect', href: 'https://rsms.me' },
         { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' }
       ]
+    }
+  },
+  runtimeConfig: {
+    public: {
+      repo: pkg.repository.url
     }
   }
 })

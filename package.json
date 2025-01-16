@@ -1,5 +1,8 @@
 {
   "name": "nuxt-app",
+  "repository": {
+    "url": "https://github.com/KirillTregubov/TaskLancer"
+  },
   "private": true,
   "type": "module",
   "scripts": {
