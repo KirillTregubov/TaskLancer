@@ -1,19 +1,19 @@
 <script lang="ts" setup>
-import { LoaderPinwheelIcon } from 'lucide-vue-next'
-const { timer, toggleTimer, resetTimer } = useTimer()
+import { LoaderPinwheelIcon, MinusIcon, PlusIcon } from 'lucide-vue-next'
+const { timer, toggleTimer, resetTimer, modifyTimer } = useTimer()
 
-const formattedTime = computed(() => {
-  const totalSeconds = Math.floor(timer.value.elapsedTime / 1000)
-  const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0')
-  const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
-    2,
-    '0'
-  )
-  return `${hours}:${minutes}`
+const formattedHours = computed(() => {
+  const totalSeconds = Math.floor(timer.elapsedTime / 1000)
+  return String(Math.floor(totalSeconds / 3600)).padStart(2, '0')
+})
+
+const formattedMinutes = computed(() => {
+  const totalSeconds = Math.floor(timer.elapsedTime / 1000)
+  return String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0')
 })
 
 const formattedSeconds = computed(() => {
-  const totalSeconds = Math.floor(timer.value.elapsedTime / 1000)
+  const totalSeconds = Math.floor(timer.elapsedTime / 1000)
   return `${String(totalSeconds % 60).padStart(2, '0')}`
 })
 // const formattedMilliseconds = computed(() => {
@@ -22,7 +22,7 @@ const formattedSeconds = computed(() => {
 // })
 
 const buttonClass = computed(() =>
-  timer.value.isRunning
+  timer.isRunning
     ? 'bg-red-500 hover:bg-red-600'
     : 'bg-green-500 hover:bg-green-600'
 )
@@ -30,10 +30,10 @@ const buttonClass = computed(() =>
 const customTimeInput = ref('')
 
 // TODO: broken until time storage is refactored
-const addCustomTime = () => {
+function parseTime() {
   const input = customTimeInput.value.trim().toLowerCase()
-
-  let timeToAdd = 0
+  let time = 0
+  const descriptionParts: string[] = []
 
   // Hours
   const pattern = /(\d+)\s*h/i
@@ -41,16 +41,18 @@ const addCustomTime = () => {
   if (match) {
     const hours = parseInt(match[1], 10)
     console.log(hours, 'hours')
-    timeToAdd += hours * 3600
+    time += hours * 3600
+    descriptionParts.push(`${hours} hour${hours !== 1 ? 's' : ''}`)
   }
 
   // Minutes
-  const minutePattern = /(\d+)\s*m/i
+  const minutePattern = /(\d+)\s*m(?!s)/i
   const minuteMatch = input.match(minutePattern)
   if (minuteMatch) {
     const minutes = parseInt(minuteMatch[1], 10)
     console.log(minutes, 'minutes')
-    timeToAdd += minutes * 60
+    time += minutes * 60
+    descriptionParts.push(`${minutes} minute${minutes !== 1 ? 's' : ''}`)
   }
 
   // Seconds
@@ -59,30 +61,66 @@ const addCustomTime = () => {
   if (secondMatch) {
     const seconds = parseInt(secondMatch[1], 10)
     console.log(seconds, 'seconds')
-    timeToAdd += seconds
+    time += seconds
+    descriptionParts.push(`${seconds} second${seconds !== 1 ? 's' : ''}`)
   }
 
-  console.log('timeToAdd', timeToAdd)
+  const description =
+    descriptionParts.length < 3
+      ? descriptionParts.join(' and ')
+      : descriptionParts.slice(0, -1).join(', ') +
+        ' and ' +
+        descriptionParts.slice(-1)
+
+  return [time * 1000, description] as const
+}
+
+function addToTimer() {
+  const [timeToAdd, description] = parseTime()
   if (timeToAdd > 0) {
-    timer.value.elapsedTime += timeToAdd * 1000
+    modifyTimer(timeToAdd)
+    customTimeInput.value = ''
+    toast.success(`Added ${description} to the timer.`)
+  } else {
+    toast.error('Failed to parse time.')
   }
-  customTimeInput.value = ''
+}
+
+function removeFromTimer() {
+  const [timeToRemove, description] = parseTime()
+  if (timeToRemove > 0) {
+    modifyTimer(-timeToRemove)
+    customTimeInput.value = ''
+    toast.success(`Removed ${description} from the timer.`)
+  } else {
+    toast.error('Failed to parse time.')
+  }
 }
 </script>
 
 <template>
   <div
-    class="flex min-h-screen flex-col items-center justify-center bg-gray-100"
+    class="flex min-h-screen flex-col items-center justify-center bg-stone-100"
   >
     <ClientOnly>
       <div
-        class="mb-4 flex items-baseline font-mono text-5xl font-bold text-gray-800"
+        class="mb-4 flex items-baseline font-mono text-5xl font-bold text-stone-800"
       >
-        <span>{{ formattedTime }}</span>
         <transition name="pulse" mode="out-in">
+          <span :key="formattedHours" class="will-change-transform">{{
+            formattedHours
+          }}</span>
+        </transition>
+        <span>:</span>
+        <transition name="pulse" mode="out-in">
+          <span :key="formattedMinutes" class="will-change-transform">{{
+            formattedMinutes
+          }}</span>
+        </transition>
+        <transition name="pulse-light" mode="out-in">
           <span
             :key="formattedSeconds"
-            class="ml-1 text-lg text-gray-500 opacity-80"
+            class="ml-1 text-xl text-stone-500 opacity-80 will-change-transform"
           >
             {{ formattedSeconds }}
           </span>
@@ -90,10 +128,15 @@ const addCustomTime = () => {
       </div>
       <template #fallback>
         <div
-          class="mb-4 flex items-baseline font-mono text-5xl font-bold text-gray-800"
+          class="mb-4 flex items-baseline font-mono text-5xl font-bold text-stone-800"
         >
-          <span>--:--</span>
-          <span class="ml-1 text-lg text-gray-500">--</span>
+          <span class="will-change-transform">--</span>
+          <span>:</span>
+          <span class="will-change-transform">--</span>
+          <span
+            class="ml-1 text-xl text-stone-500 opacity-80 will-change-transform"
+            >--</span
+          >
         </div>
       </template>
     </ClientOnly>
@@ -119,7 +162,7 @@ const addCustomTime = () => {
         </button>
         <template #fallback>
           <button
-            class="grid items-center justify-center rounded-lg bg-gray-500 px-6 py-3 text-lg font-semibold text-white opacity-50 transition-colors"
+            class="grid items-center justify-center rounded-lg bg-stone-500 px-6 py-3 text-lg font-semibold text-white opacity-50 transition-colors"
             @click="toggleTimer"
           >
             <span
@@ -132,26 +175,36 @@ const addCustomTime = () => {
         </template>
       </ClientOnly>
       <button
-        class="transform rounded-lg bg-gray-500 px-6 py-3 text-lg font-semibold text-white transition-all duration-300 hover:bg-gray-600"
+        class="transform rounded-lg bg-stone-500 px-6 py-3 text-lg font-semibold text-white transition-all duration-300 hover:bg-stone-600"
         @click="resetTimer"
       >
         Reset
       </button>
     </div>
-    <div class="mt-4 flex items-center space-x-2">
+    <div class="mt-4 flex items-center gap-2">
       <input
         v-model="customTimeInput"
         type="text"
-        placeholder="Add Time"
-        class="w-48 rounded-lg border border-gray-300 px-3 py-2 text-lg focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        placeholder="Modify Timer"
+        class="w-full min-w-16 max-w-48 self-stretch rounded bg-stone-300 px-3 py-1.5 text-lg font-medium text-stone-700 placeholder-stone-400 outline-none ring-stone-500 transition focus-visible:ring-2"
       />
-      <button
-        class="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-        @click="addCustomTime"
-      >
-        Add Time
-      </button>
-      <!-- TODO: remove time button -->
+      <div class="flex">
+        <button
+          class="rounded-l border-r-2 border-stone-400/80 bg-stone-300 p-2.5 text-stone-600 outline-none ring-stone-500 transition hover:bg-stone-200 focus-visible:ring-2 active:bg-stone-200 disabled:pointer-events-none disabled:opacity-50"
+          :disabled="customTimeInput.length === 0"
+          @click="addToTimer"
+        >
+          <PlusIcon />
+        </button>
+
+        <button
+          class="rounded-r bg-stone-300 p-2.5 text-stone-600 outline-none ring-stone-500 transition hover:bg-stone-200 focus-visible:ring-2 active:bg-stone-200 disabled:pointer-events-none disabled:opacity-50"
+          :disabled="customTimeInput.length === 0"
+          @click="removeFromTimer"
+        >
+          <MinusIcon />
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -159,7 +212,19 @@ const addCustomTime = () => {
 <style scoped>
 @keyframes pulse {
   0% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-light {
+  0% {
     transform: scale(1.15);
+    opacity: 1;
+  }
+  20% {
     opacity: 1;
   }
   100% {
@@ -171,7 +236,12 @@ const addCustomTime = () => {
 .pulse-enter-active {
   animation: pulse 0.5s ease-in-out;
 }
-.pulse-leave-active {
+.pulse-light-enter-active {
+  animation: pulse-light 0.5s ease-in-out;
+}
+
+.pulse-leave-active,
+.pulse-light-leave-active {
   transition: none;
 }
 </style>

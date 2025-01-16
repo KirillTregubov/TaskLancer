@@ -1,76 +1,110 @@
-interface TimerState {
-  isRunning: boolean
+type TimerState = {
   elapsedTime: number
-  lastSaved: number | null
+  startDate: number | null
 }
 
 export default function () {
-  // TODO: store elapsedTime as exact time from timestamps, but return approximate time to user by calculating in interval
-  const timer = useLocalStorage<TimerState>('timer', {
-    isRunning: false,
+  // Private state stored in localStorage
+  const timerStorage = useLocalStorage<TimerState>('timer', {
     elapsedTime: 0,
-    lastSaved: null
+    startDate: null
   })
+
+  // Exposed state
+  const timer = reactive({
+    isRunning: computed(() => Boolean(timerStorage.value.startDate)),
+    elapsedTime: timerStorage.value.startDate
+      ? Date.now() - timerStorage.value.startDate
+      : timerStorage.value.elapsedTime
+  })
+
   let interval: ReturnType<typeof setInterval> | undefined = undefined
 
-  const toggleTimer = () => {
-    if (!timer.value.isRunning) {
-      timer.value.isRunning = true
-      const startTime = Date.now() - timer.value.elapsedTime
-      interval = setInterval(() => {
-        console.log('up')
-        timer.value.elapsedTime = Date.now() - startTime
-      }, 10)
+  function startTimer() {
+    if (interval) clearInterval(interval)
+
+    if (timerStorage.value.startDate != null) {
+      timer.elapsedTime =
+        timerStorage.value.elapsedTime +
+        (Date.now() - timerStorage.value.startDate)
     } else {
-      timer.value.isRunning = false
-      if (interval) clearInterval(interval)
+      timer.elapsedTime = timerStorage.value.elapsedTime
+      timerStorage.value.startDate = Date.now()
+    }
+
+    interval = setInterval(() => {
+      timer.elapsedTime += 1000
+    }, 1000)
+  }
+
+  function stopTimer() {
+    if (!timer.isRunning) throw new Error('Timer is already stopped')
+
+    timerStorage.value.elapsedTime +=
+      Date.now() - (timerStorage.value.startDate as number)
+    timer.elapsedTime = timerStorage.value.elapsedTime // TODO: this can cause the timer to adjust unexpectedly
+    timerStorage.value.startDate = null
+    if (interval) clearInterval(interval)
+  }
+
+  function toggleTimer() {
+    if (!timer.isRunning) {
+      startTimer()
+    } else {
+      stopTimer()
     }
   }
 
-  const resetTimer = () => {
-    if (timer.value.isRunning) {
-      toggleTimer()
+  function resetTimer() {
+    if (timer.isRunning) {
+      stopTimer()
     }
 
-    timer.value.elapsedTime = 0
-    timer.value.lastSaved = null
+    timerStorage.value.elapsedTime = 0
+    timerStorage.value.startDate = null
+    timer.elapsedTime = 0
   }
 
-  function saveTimerState() {
-    if (timer.value.isRunning) {
-      // TODO: use intermediate variable instead of isRunning so that UI doesn't flash
-      toggleTimer()
-      timer.value.lastSaved = Date.now()
+  function modifyTimer(timeDelta: number) {
+    console.log(timeDelta)
+
+    const currentDate = Date.now()
+    let newTime = timerStorage.value.elapsedTime + timeDelta
+    if (timerStorage.value.startDate != null) {
+      newTime += currentDate - timerStorage.value.startDate
+      timerStorage.value.startDate = currentDate
+    }
+
+    if (newTime <= 0) {
+      timerStorage.value.elapsedTime = 0
+    } else {
+      timerStorage.value.elapsedTime = newTime
+    }
+    timer.elapsedTime = timerStorage.value.elapsedTime
+
+    if (newTime <= 0) {
+      timerStorage.value.startDate = null
+      startTimer()
     }
   }
-
-  // TODO: add Focus management, when unfocused for a long time it breaks
 
   onMounted(() => {
-    if (timer.value.lastSaved) {
-      const elapsed = Date.now() - timer.value.lastSaved
-      timer.value.elapsedTime += elapsed
-      timer.value.lastSaved = null
+    if (timer.isRunning) {
+      startTimer()
     }
-
-    if (timer.value.isRunning) {
-      timer.value.isRunning = false
-      toggleTimer()
-    }
-
-    window.addEventListener('beforeunload', saveTimerState)
   })
 
-  onBeforeRouteLeave(saveTimerState)
-  onUnmounted(() => {
-    saveTimerState()
-
-    window.removeEventListener('beforeunload', saveTimerState)
+  const focused = useWindowFocus()
+  watch(focused, () => {
+    if (focused.value && timerStorage.value.startDate) {
+      startTimer()
+    }
   })
 
   return {
     timer,
     toggleTimer,
-    resetTimer
+    resetTimer,
+    modifyTimer
   }
 }

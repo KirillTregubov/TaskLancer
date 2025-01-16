@@ -3,9 +3,6 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss', '@nuxt/eslint', '@vueuse/nuxt'],
-  typescript: {
-    typeCheck: 'build'
-  },
   imports: {
     presets: [
       {
@@ -13,5 +10,16 @@ export default defineNuxtConfig({
         imports: ['toast']
       }
     ]
+  },
+  typescript: {
+    typeCheck: 'build'
+  },
+  app: {
+    head: {
+      link: [
+        { rel: 'preconnect', href: 'https://rsms.me' },
+        { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' }
+      ]
+    }
   }
 })
