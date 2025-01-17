@@ -127,7 +127,7 @@ function removeFromTimer() {
         </Transition>
       </div>
       <template #fallback>
-        <div
+        <span
           class="flex items-baseline font-mono text-5xl font-bold text-stone-800"
         >
           <span class="will-change-transform">--</span>
@@ -137,7 +137,7 @@ function removeFromTimer() {
             class="ml-1 text-xl text-stone-500 opacity-80 will-change-transform"
             >--</span
           >
-        </div>
+        </span>
       </template>
     </ClientOnly>
     <div class="flex gap-2">
