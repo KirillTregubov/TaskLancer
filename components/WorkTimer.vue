@@ -126,6 +126,7 @@ function removeFromTimer() {
           </span>
         </Transition>
       </div>
+
       <template #fallback>
         <span
           class="flex items-baseline font-mono text-5xl font-bold text-stone-800"
@@ -144,7 +145,7 @@ function removeFromTimer() {
       <ClientOnly>
         <button
           :class="buttonClass"
-          class="grid items-center justify-center rounded px-6 py-2 text-lg font-semibold outline-none transition focus-visible:ring-2"
+          class="grid items-center justify-center rounded-sm px-6 py-2 text-lg font-semibold transition outline-none focus-visible:ring-2"
           @click="toggleTimer"
         >
           <span
@@ -160,10 +161,10 @@ function removeFromTimer() {
             Stop
           </span>
         </button>
+
         <template #fallback>
           <button
-            class="grid items-center justify-center rounded bg-stone-300 px-6 py-2 text-lg font-semibold text-stone-600 outline-none transition focus-visible:ring-2"
-            @click="toggleTimer"
+            class="grid items-center justify-center rounded-sm bg-stone-300 px-6 py-2 text-lg font-semibold text-stone-600 transition outline-none focus-visible:ring-2"
           >
             <span
               class="col-start-1 row-start-1 flex animate-spin items-center justify-center"
@@ -175,7 +176,7 @@ function removeFromTimer() {
         </template>
       </ClientOnly>
       <button
-        class="transform rounded bg-stone-300 px-6 py-2 text-lg font-semibold text-stone-600 outline-none ring-stone-500 transition hover:bg-stone-200 hover:text-stone-500 focus-visible:ring-2 active:bg-stone-200 active:text-stone-500"
+        class="transform rounded-sm bg-stone-300 px-6 py-2 text-lg font-semibold text-stone-600 ring-stone-500 transition outline-none hover:bg-stone-200 hover:text-stone-500 focus-visible:ring-2 active:bg-stone-200 active:text-stone-500"
         @click="resetTimer"
       >
         Reset
@@ -185,11 +186,11 @@ function removeFromTimer() {
       v-model="customTimeInput"
       type="text"
       placeholder="Modify Timer"
-      class="w-full min-w-16 max-w-44 self-stretch rounded bg-stone-300 px-3 py-2 text-lg font-medium text-stone-700 placeholder-stone-400 outline-none ring-stone-500 transition selection:bg-stone-500 selection:text-stone-100 placeholder:select-none focus-visible:ring-2"
+      class="w-full max-w-44 min-w-16 self-stretch rounded-sm bg-stone-300 px-3 py-2 text-lg font-medium text-stone-700 placeholder-stone-400 ring-stone-500 transition outline-none selection:bg-stone-500 selection:text-stone-100 placeholder:select-none focus-visible:ring-2"
     />
     <div class="flex w-fit rounded">
       <button
-        class="peer z-10 rounded-l border-stone-400/80 bg-stone-300 p-2.5 text-stone-600 outline-none ring-stone-500 transition hover:bg-stone-200 hover:text-stone-500 focus-visible:ring-2 active:bg-stone-200 active:text-stone-500 disabled:pointer-events-none disabled:opacity-50"
+        class="peer z-10 rounded-l border-stone-400/80 bg-stone-300 p-2.5 text-stone-600 ring-stone-500 transition outline-none hover:bg-stone-200 hover:text-stone-500 focus-visible:ring-2 active:bg-stone-200 active:text-stone-500 disabled:pointer-events-none disabled:opacity-50"
         :disabled="customTimeInput.length === 0"
         @click="addToTimer"
       >
@@ -197,7 +198,7 @@ function removeFromTimer() {
       </button>
       <span class="w-0.5 bg-stone-400/80 transition peer-disabled:opacity-50" />
       <button
-        class="peer z-10 rounded-r bg-stone-300 p-2.5 text-stone-600 outline-none ring-stone-500 transition hover:bg-stone-200 hover:text-stone-500 focus-visible:ring-2 active:bg-stone-200 active:text-stone-500 disabled:pointer-events-none disabled:opacity-50"
+        class="peer z-10 rounded-r bg-stone-300 p-2.5 text-stone-600 ring-stone-500 transition outline-none hover:bg-stone-200 hover:text-stone-500 focus-visible:ring-2 active:bg-stone-200 active:text-stone-500 disabled:pointer-events-none disabled:opacity-50"
         :disabled="customTimeInput.length === 0"
         @click="removeFromTimer"
       >

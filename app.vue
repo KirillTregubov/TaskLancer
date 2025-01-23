@@ -20,7 +20,7 @@ const runtimeConfig = useRuntimeConfig()
           rel="noopener"
           :href="runtimeConfig.public.repo"
           target="_blank"
-          class="rounded underline outline-none ring-stone-500 transition hover:text-stone-600 focus-visible:text-stone-600 focus-visible:ring-2"
+          class="rounded-sm underline ring-stone-500 transition outline-none hover:text-stone-600 focus-visible:text-stone-600 focus-visible:ring-2"
           >open source</a
         >.
       </span>

@@ -1,17 +1,16 @@
+import tailwindcss from '@tailwindcss/vite'
 import pkg from './package.json'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/eslint', '@vueuse/nuxt'],
-  imports: {
-    presets: [
-      {
-        from: 'vue-sonner',
-        imports: ['toast']
-      }
-    ]
+  css: ['~/assets/css/index.css'],
+  modules: ['@nuxt/eslint', '@vueuse/nuxt'],
+  runtimeConfig: {
+    public: {
+      repo: pkg.repository.url
+    }
   },
   typescript: {
     typeCheck: 'build'
@@ -24,9 +23,15 @@ export default defineNuxtConfig({
       ]
     }
   },
-  runtimeConfig: {
-    public: {
-      repo: pkg.repository.url
-    }
+  vite: {
+    plugins: [tailwindcss()]
+  },
+  imports: {
+    presets: [
+      {
+        from: 'vue-sonner',
+        imports: ['toast']
+      }
+    ]
   }
 })
