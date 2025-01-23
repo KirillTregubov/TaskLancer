@@ -165,6 +165,7 @@ function removeFromTimer() {
         <template #fallback>
           <button
             class="grid items-center justify-center rounded-sm bg-stone-300 px-6 py-2 text-lg font-semibold text-stone-600 transition outline-none focus-visible:ring-2"
+            @click="toggleTimer"
           >
             <span
               class="col-start-1 row-start-1 flex animate-spin items-center justify-center"
