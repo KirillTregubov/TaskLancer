@@ -15,5 +15,12 @@ useSeoMeta({
       </div>
       <WorkTimer />
     </section>
+    <section>
+      <div class="mb-3">
+        <h2>Invoice Generation</h2>
+        <p class="text-stone-600">Generate invoices for your clients.</p>
+      </div>
+      <InvoiceGenerator />
+    </section>
   </div>
 </template>

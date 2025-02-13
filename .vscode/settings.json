@@ -1,0 +1,4 @@
+{
+  "editor.gotoLocation.multipleDefinitions": "goto",
+  "vue.server.hybridMode": true
+}
