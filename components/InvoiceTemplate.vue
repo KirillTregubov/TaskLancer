@@ -173,7 +173,7 @@ const saveAsPDF = () => {
         <div class="h-full p-[1in]">
           <div class="grid h-full w-full grid-cols-2 gap-x-16 gap-y-8">
             <div>
-              <h1 class="mb-1 text-lg font-semibold">{{ companyName }}</h1>
+              <h1 class="mb-0.5 text-lg font-semibold">{{ companyName }}</h1>
               <h2 v-if="address" class="whitespace-pre-wrap">
                 {{ address }}
               </h2>

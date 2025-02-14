@@ -194,19 +194,19 @@ const filteredInvoiceContents = computed(() => {
           <div
             v-for="(item, index) in invoiceContents"
             :key="index"
-            class="flex items-center space-x-2"
+            class="flex items-start space-x-2"
           >
-            <input
+            <textarea
               v-model="item.description"
-              type="text"
+              rows="2"
+              class="min-h-10 w-full self-stretch rounded-md bg-stone-300 px-3 py-2 font-medium text-stone-700 placeholder-stone-400 shadow-xs ring-stone-500 transition outline-none selection:bg-stone-500 selection:text-stone-100 placeholder:select-none"
               placeholder="Description"
-              class="w-full self-stretch rounded-md bg-stone-300 px-3 py-2 font-medium text-stone-700 placeholder-stone-400 shadow-xs ring-stone-500 transition outline-none selection:bg-stone-500 selection:text-stone-100 placeholder:select-none"
             />
             <input
               v-model.number="item.amount"
               type="number"
               placeholder="Amount"
-              class="w-full max-w-44 self-stretch rounded-md bg-stone-300 px-3 py-2 font-medium text-stone-700 placeholder-stone-400 shadow-xs ring-stone-500 transition outline-none selection:bg-stone-500 selection:text-stone-100 placeholder:select-none"
+              class="w-full max-w-44 rounded-md bg-stone-300 px-3 py-2.5 font-medium text-stone-700 placeholder-stone-400 shadow-xs ring-stone-500 transition outline-none selection:bg-stone-500 selection:text-stone-100 placeholder:select-none"
             />
             <button
               type="button"
