@@ -20,8 +20,6 @@ const invoiceContents = ref([
 const currencySymbol = ref('$')
 const amountPaid = ref(0)
 
-console.log(date.value)
-
 const addLineItem = () => {
   invoiceContents.value.push({ description: '', amount: undefined })
 }
@@ -285,11 +283,3 @@ const filteredInvoiceContents = computed(() => {
     </form>
   </div>
 </template>
-
-<!-- <style scoped>
-@reference "../assets/css/index.css";
-
-::selection {
-  @apply bg-stone-500 text-stone-100;
-}
-</style> -->

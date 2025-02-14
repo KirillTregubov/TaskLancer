@@ -24,7 +24,10 @@ export default defineNuxtConfig({
     }
   },
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    build: {
+      cssMinify: 'lightningcss'
+    }
   },
   imports: {
     presets: [
