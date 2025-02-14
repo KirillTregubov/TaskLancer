@@ -145,7 +145,7 @@ function removeFromTimer() {
       <ClientOnly>
         <button
           :class="buttonClass"
-          class="grid items-center justify-center rounded-sm px-6 py-2 text-lg font-semibold transition outline-none focus-visible:ring-2"
+          class="grid items-center justify-center rounded-sm px-6 py-2 text-lg font-semibold shadow-xs transition outline-none focus-visible:ring-2"
           @click="toggleTimer"
         >
           <span
@@ -164,7 +164,7 @@ function removeFromTimer() {
 
         <template #fallback>
           <button
-            class="grid items-center justify-center rounded-sm bg-stone-300 px-6 py-2 text-lg font-semibold text-stone-600 transition outline-none focus-visible:ring-2"
+            class="grid items-center justify-center rounded-sm bg-stone-300 px-6 py-2 text-lg font-semibold text-stone-600 shadow-xs transition outline-none focus-visible:ring-2"
             @click="toggleTimer"
           >
             <span
@@ -177,7 +177,7 @@ function removeFromTimer() {
         </template>
       </ClientOnly>
       <button
-        class="transform rounded-sm bg-stone-300 px-6 py-2 text-lg font-semibold text-stone-600 ring-stone-500 transition outline-none hover:bg-stone-200 hover:text-stone-500 focus-visible:ring-2 active:bg-stone-200 active:text-stone-500"
+        class="rounded-sm bg-stone-300 px-6 py-2 text-lg font-semibold text-stone-600 shadow-xs ring-stone-500 transition outline-none hover:bg-stone-200 hover:text-stone-500 focus-visible:ring-2 active:bg-stone-200 active:text-stone-500"
         @click="resetTimer"
       >
         Reset
@@ -187,11 +187,11 @@ function removeFromTimer() {
       v-model="customTimeInput"
       type="text"
       placeholder="Modify Timer"
-      class="w-full max-w-44 min-w-16 self-stretch rounded-sm bg-stone-300 px-3 py-2 text-lg font-medium text-stone-700 placeholder-stone-400 ring-stone-500 transition outline-none selection:bg-stone-500 selection:text-stone-100 placeholder:select-none focus-visible:ring-2"
+      class="w-full max-w-44 min-w-16 self-stretch rounded-sm bg-stone-300 px-3 py-2 text-lg font-medium text-stone-700 placeholder-stone-400 shadow-xs ring-stone-500 transition outline-none selection:bg-stone-500 selection:text-stone-100 placeholder:select-none focus-visible:ring-2"
     />
-    <div class="flex w-fit rounded">
+    <div class="flex w-fit rounded shadow-xs">
       <button
-        class="peer z-10 rounded-l border-stone-400/80 bg-stone-300 p-2.5 text-stone-600 ring-stone-500 transition outline-none hover:bg-stone-200 hover:text-stone-500 focus-visible:ring-2 active:bg-stone-200 active:text-stone-500 disabled:pointer-events-none disabled:opacity-50"
+        class="peer z-10 rounded-l-sm bg-stone-300 p-2.5 text-stone-600 ring-stone-500 transition outline-none hover:bg-stone-200 hover:text-stone-500 focus-visible:ring-2 active:bg-stone-200 active:text-stone-500 disabled:pointer-events-none disabled:opacity-50"
         :disabled="customTimeInput.length === 0"
         @click="addToTimer"
       >
@@ -199,7 +199,7 @@ function removeFromTimer() {
       </button>
       <span class="w-0.5 bg-stone-400/80 transition peer-disabled:opacity-50" />
       <button
-        class="peer z-10 rounded-r bg-stone-300 p-2.5 text-stone-600 ring-stone-500 transition outline-none hover:bg-stone-200 hover:text-stone-500 focus-visible:ring-2 active:bg-stone-200 active:text-stone-500 disabled:pointer-events-none disabled:opacity-50"
+        class="peer z-10 rounded-r-sm bg-stone-300 p-2.5 text-stone-600 ring-stone-500 transition outline-none hover:bg-stone-200 hover:text-stone-500 focus-visible:ring-2 active:bg-stone-200 active:text-stone-500 disabled:pointer-events-none disabled:opacity-50"
         :disabled="customTimeInput.length === 0"
         @click="removeFromTimer"
       >

@@ -50,7 +50,8 @@ const formattedDate = computed(() => {
     return date.toLocaleDateString(locale, {
       year: 'numeric',
       month: 'numeric',
-      day: 'numeric'
+      day: 'numeric',
+      timeZone: 'UTC'
     })
   } catch (error) {
     console.error('Wrong date format', error)
@@ -162,7 +163,7 @@ const saveAsPDF = () => {
 <template>
   <div>
     <button
-      class="cursor-pointer rounded-sm bg-stone-800 px-6 py-2 font-semibold text-stone-100 ring-stone-500 transition outline-none hover:bg-stone-700 focus-visible:ring-2 active:bg-stone-700"
+      class="cursor-pointer rounded-md bg-stone-800 px-6 py-2 font-semibold text-stone-100 shadow-xs ring-stone-500 transition outline-none hover:bg-stone-700 focus-visible:ring-2 active:bg-stone-700"
       @click="saveAsPDF"
     >
       Print Invoice
