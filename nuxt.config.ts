@@ -26,7 +26,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
     build: {
-      cssMinify: 'lightningcss'
+      cssMinify: false
     }
   },
   imports: {
