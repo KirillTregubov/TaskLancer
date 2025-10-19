@@ -39,7 +39,7 @@ function parseTime() {
   const pattern = /(\d+)\s*h/i
   const match = input.match(pattern)
   if (match) {
-    const hours = parseInt(match[1], 10)
+    const hours = parseInt(match[1] ?? '0', 10)
     console.log(hours, 'hours')
     time += hours * 3600
     descriptionParts.push(`${hours} hour${hours !== 1 ? 's' : ''}`)
@@ -49,7 +49,7 @@ function parseTime() {
   const minutePattern = /(\d+)\s*m(?!s)/i
   const minuteMatch = input.match(minutePattern)
   if (minuteMatch) {
-    const minutes = parseInt(minuteMatch[1], 10)
+    const minutes = parseInt(minuteMatch[1] ?? '0', 10)
     console.log(minutes, 'minutes')
     time += minutes * 60
     descriptionParts.push(`${minutes} minute${minutes !== 1 ? 's' : ''}`)
@@ -59,7 +59,7 @@ function parseTime() {
   const secondPattern = /(\d+)\s*s/i
   const secondMatch = input.match(secondPattern)
   if (secondMatch) {
-    const seconds = parseInt(secondMatch[1], 10)
+    const seconds = parseInt(secondMatch[1] ?? '0', 10)
     console.log(seconds, 'seconds')
     time += seconds
     descriptionParts.push(`${seconds} second${seconds !== 1 ? 's' : ''}`)

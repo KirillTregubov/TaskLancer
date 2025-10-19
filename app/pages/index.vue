@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 useSeoMeta({
   title: 'TaskLancer',
   ogTitle: 'TaskLancer',

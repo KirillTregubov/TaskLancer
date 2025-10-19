@@ -42,6 +42,10 @@ const filteredInvoiceContents = computed(() => {
     amount: number
   }[]
 })
+
+const dateAsDate = computed(() => {
+  return date.value ? new Date(date.value) : new Date()
+})
 </script>
 
 <template>
@@ -269,7 +273,7 @@ const filteredInvoiceContents = computed(() => {
 
       <InvoiceTemplate
         :invoice-number="invoiceNumber"
-        :date="new Date(date)"
+        :date="dateAsDate"
         :company-name="companyName"
         :contact-name="contactName"
         :address="address"

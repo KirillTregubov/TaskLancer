@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import faviconSrc from '~/assets/images/favicon.ico'
 // import jsPDF from 'jspdf'
 
 interface Props {
@@ -137,31 +138,71 @@ const saveAsPDF = () => {
   const printWindow = window.open('', '') // , 'height=600,width=800'
   if (!printWindow) return
 
-  // Write the content to the new window
-  printWindow.document.write(
-    '<html><head><title>Generated Invoice</title><style>@media print { @page { margin: 0; } } html { font-size: 24px; font-family: Helvetica !important; } table { font-size: unset; } th:not(.unset), td:not(.unset) { padding-top: 0.125rem; }</style>'
-  )
+  const printDocument = printWindow.document
+  printDocument.open()
 
-  const tailwindScript = printWindow.document.createElement('script')
+  const htmlEl = printDocument.createElement('html')
+  printDocument.appendChild(htmlEl)
+
+  // Head
+  const head = printDocument.createElement('head')
+  htmlEl.appendChild(head)
+
+  // title
+  const title = printDocument.createElement('title')
+  title.textContent = 'Generated Invoice'
+  head.appendChild(title)
+
+  // favicon
+  const faviconLink = printDocument.createElement('link')
+  faviconLink.rel = 'icon'
+  faviconLink.href = faviconSrc
+  head.appendChild(faviconLink)
+
+  const style = printDocument.createElement('style')
+  style.textContent = `
+    @media print { 
+      @page { margin: 0; }
+      .no-print { display: none !important; }
+    }
+    html { font-size: 24px; font-family: Helvetica !important; }
+    table { font-size: unset; }
+    th:not(.unset), td:not(.unset) { padding-top: 0.125rem; }
+}
+  `
+  head.appendChild(style)
+
+  const tailwindScript = printDocument.createElement('script')
   tailwindScript.src = 'https://unpkg.com/@tailwindcss/browser@4'
-  printWindow.document.head.appendChild(tailwindScript)
+  head.appendChild(tailwindScript)
 
-  printWindow.document.write('</head><body>')
-  printWindow.document.write(element.innerHTML)
-  printWindow.document.write('</body></html>')
+  // <body>
+  const body = printDocument.createElement('body')
+  const cloned = element.cloneNode(true)
+  body.appendChild(cloned)
+  htmlEl.appendChild(body)
 
   // Close the document to ensure all resources are loaded
-  printWindow.document.close()
+  printDocument.close()
 
-  printWindow.addEventListener('load', () => {
-    printWindow.print()
-    printWindow.close()
+  printWindow.addEventListener('load', async () => {
+    setTimeout(() => {
+      printWindow.focus()
+      printWindow.print()
+    }, 1)
+    printWindow.onafterprint = () => printWindow.close()
   })
 }
 </script>
 
 <template>
   <div>
+    <!-- <NuxtLink
+      class="cursor-pointer rounded-md bg-stone-800 px-6 py-2 font-semibold text-stone-100 shadow-xs ring-stone-500 transition outline-none hover:bg-stone-700 focus-visible:ring-2 active:bg-stone-700"
+      to="/invoicing"
+    >
+      Print
+    </NuxtLink> -->
     <button
       class="cursor-pointer rounded-md bg-stone-800 px-6 py-2 font-semibold text-stone-100 shadow-xs ring-stone-500 transition outline-none hover:bg-stone-700 focus-visible:ring-2 active:bg-stone-700"
       @click="saveAsPDF"
@@ -170,6 +211,9 @@ const saveAsPDF = () => {
     </button>
     <div class="hidden max-w-7xl bg-white">
       <div id="pdf-container" ref="pdf-container">
+        <div class="no-print fixed h-full w-full content-center bg-stone-200">
+          <h1 class="text-center text-sm font-bold">Printing...</h1>
+        </div>
         <div class="h-full p-[1in]">
           <div class="grid h-full w-full grid-cols-2 gap-x-16 gap-y-8">
             <div>
