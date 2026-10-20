@@ -1,10 +1,5 @@
 <script lang="ts" setup>
-import {
-  formatMoney,
-  invoiceTotals,
-  currencyDigits,
-  toMinorUnits
-} from '~/utils/currency'
+import { formatMoney, invoiceTotals, currencyDigits, toMinorUnits } from '~/utils/currency'
 
 const props = defineProps<{
   invoiceNumber?: string
@@ -25,7 +20,7 @@ const totals = computed(() => {
     return invoiceTotals(
       props.invoiceContents.map((item) => item.amount),
       props.amountPaid,
-      props.currency
+      props.currency,
     )
   } catch {
     return null
@@ -47,7 +42,7 @@ const formattedDate = computed(() => {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
-    timeZone: 'UTC'
+    timeZone: 'UTC',
   }).format(new Date(`${props.date}T00:00:00Z`))
 })
 const formattedPhone = computed(() => {
@@ -57,18 +52,14 @@ const formattedPhone = computed(() => {
     : props.phone
 })
 const contactDetails = computed(() =>
-  [props.contactName, formattedPhone.value, props.email]
-    .filter(Boolean)
-    .join(', ')
+  [props.contactName, formattedPhone.value, props.email].filter(Boolean).join(', '),
 )
 
 const printInvoice = async () => {
   await nextTick()
   const title = document.title
   try {
-    document.title = props.invoiceNumber
-      ? `Invoice ${props.invoiceNumber}`
-      : 'Invoice'
+    document.title = props.invoiceNumber ? `Invoice ${props.invoiceNumber}` : 'Invoice'
     window.print()
   } finally {
     document.title = title
@@ -140,9 +131,7 @@ defineExpose({ printInvoice })
           </tbody>
           <tfoot v-if="totals">
             <tr>
-              <td rowspan="4" class="invoice-thanks">
-                Thank you for your business!
-              </td>
+              <td rowspan="4" class="invoice-thanks">Thank you for your business!</td>
               <td colspan="2" class="invoice-total">
                 <div>
                   <span>Subtotal</span><span>{{ money(totals.total) }}</span>
@@ -159,17 +148,14 @@ defineExpose({ printInvoice })
             <tr>
               <td colspan="2" class="invoice-total">
                 <div>
-                  <span>Amount Paid</span
-                  ><span>{{ money(totals.amountPaid) }}</span>
+                  <span>Amount Paid</span><span>{{ money(totals.amountPaid) }}</span>
                 </div>
               </td>
             </tr>
             <tr>
               <td colspan="2" class="invoice-total">
                 <div>
-                  <span>{{
-                    totals.balance < 0 ? 'Credit Balance' : 'Balance Due'
-                  }}</span
+                  <span>{{ totals.balance < 0 ? 'Credit Balance' : 'Balance Due' }}</span
                   ><span>{{ money(Math.abs(totals.balance)) }}</span>
                 </div>
               </td>
@@ -177,10 +163,7 @@ defineExpose({ printInvoice })
           </tfoot>
         </table>
         <footer class="invoice-footer">
-          <p>
-            If you have any questions about this invoice, please do not hesitate
-            to contact
-          </p>
+          <p>If you have any questions about this invoice, please do not hesitate to contact</p>
           <p v-if="contactDetails">{{ contactDetails }}</p>
         </footer>
       </article>

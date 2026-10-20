@@ -20,15 +20,15 @@ export function readRecipients(storage: Pick<Storage, 'getItem'>): string[] {
       parsed
         .filter((value): value is string => typeof value === 'string')
         .map((value) => value.trim())
-        .filter(Boolean)
-    )
+        .filter(Boolean),
+    ),
   ]
 }
 
 export function writeRecipient(
   storage: Pick<Storage, 'getItem' | 'setItem'>,
   recipient: string,
-  save: boolean
+  save: boolean,
 ): string[] {
   const value = recipient.trim()
   if (!value) throw new Error('Enter a recipient before saving.')

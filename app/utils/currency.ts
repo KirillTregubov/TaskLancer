@@ -3,14 +3,14 @@ export const currencies = [
   ['USD', 'US dollar'],
   ['EUR', 'Euro'],
   ['GBP', 'British pound'],
-  ['AUD', 'Australian dollar']
+  ['AUD', 'Australian dollar'],
 ] as const
 
 export function currencyDigits(currency: string): number {
   return (
     new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency
+      currency,
     }).resolvedOptions().maximumFractionDigits ?? 2
   )
 }
@@ -26,7 +26,7 @@ export function toMinorUnits(value: string | number, digits: number): number {
     throw new Error(`This currency supports ${digits} decimal places.`)
   }
   const units = Number(
-    `${match[1]}${match[2] || '0'}${fraction.slice(0, digits).padEnd(digits, '0')}`
+    `${match[1]}${match[2] || '0'}${fraction.slice(0, digits).padEnd(digits, '0')}`,
   )
   if (!Number.isSafeInteger(units)) {
     throw new Error('The amount is too large.')
@@ -37,7 +37,7 @@ export function toMinorUnits(value: string | number, digits: number): number {
 export function invoiceTotals(
   amounts: Array<string | number>,
   paid: string | number,
-  currency: string
+  currency: string,
 ) {
   const digits = currencyDigits(currency)
   const total = amounts.reduce<number>((sum, amount) => {
@@ -48,8 +48,7 @@ export function invoiceTotals(
   const amountPaid = toMinorUnits(paid === '' ? '0' : paid, digits)
   if (amountPaid < 0) throw new Error('Amount paid cannot be negative.')
   const balance = total - amountPaid
-  if (!Number.isSafeInteger(balance))
-    throw new Error('The balance is too large.')
+  if (!Number.isSafeInteger(balance)) throw new Error('The balance is too large.')
   return { total, amountPaid, balance }
 }
 
@@ -58,14 +57,12 @@ export function formatMoney(units: number, currency: string): string {
   const divisor = 10n ** BigInt(digits)
   const minor = BigInt(units)
   const whole = minor / divisor
-  const fraction = ((minor < 0n ? -minor : minor) % divisor)
-    .toString()
-    .padStart(digits, '0')
+  const fraction = ((minor < 0n ? -minor : minor) % divisor).toString().padStart(digits, '0')
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
     currencyDisplay: 'code',
-    currencySign: 'accounting'
+    currencySign: 'accounting',
   })
   // Format the integer exactly; dividing a large amount as a Number can lose cents.
   return formatter

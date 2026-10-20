@@ -24,7 +24,7 @@ const formattedSeconds = computed(() => {
 const buttonClass = computed(() =>
   timer.isRunning
     ? 'bg-red-600 text-red-50 ring-red-800 hover:bg-red-500 active:bg-red-500'
-    : 'bg-green-600 text-green-50 ring-green-800 hover:bg-green-500 active:bg-green-500'
+    : 'bg-green-600 text-green-50 ring-green-800 hover:bg-green-500 active:bg-green-500',
 )
 
 const customTimeInput = ref('')
@@ -68,9 +68,7 @@ function parseTime() {
   const description =
     descriptionParts.length < 3
       ? descriptionParts.join(' and ')
-      : descriptionParts.slice(0, -1).join(', ') +
-        ' and ' +
-        descriptionParts.slice(-1)
+      : descriptionParts.slice(0, -1).join(', ') + ' and ' + descriptionParts.slice(-1)
 
   return [time * 1000, description] as const
 }
@@ -99,23 +97,15 @@ function removeFromTimer() {
 </script>
 
 <template>
-  <div
-    class="inline-grid grid-cols-[max-content_max-content] items-center gap-2"
-  >
+  <div class="inline-grid grid-cols-[max-content_max-content] items-center gap-2">
     <ClientOnly>
-      <div
-        class="flex items-baseline font-mono text-5xl font-bold text-stone-800"
-      >
+      <div class="flex items-baseline font-mono text-5xl font-bold text-stone-800">
         <Transition name="pulse" mode="out-in">
-          <span :key="formattedHours" class="will-change-transform">{{
-            formattedHours
-          }}</span>
+          <span :key="formattedHours" class="will-change-transform">{{ formattedHours }}</span>
         </Transition>
         <span>:</span>
         <Transition name="pulse" mode="out-in">
-          <span :key="formattedMinutes" class="will-change-transform">{{
-            formattedMinutes
-          }}</span>
+          <span :key="formattedMinutes" class="will-change-transform">{{ formattedMinutes }}</span>
         </Transition>
         <Transition name="pulse-light" mode="out-in">
           <span
@@ -128,16 +118,11 @@ function removeFromTimer() {
       </div>
 
       <template #fallback>
-        <span
-          class="flex items-baseline font-mono text-5xl font-bold text-stone-800"
-        >
+        <span class="flex items-baseline font-mono text-5xl font-bold text-stone-800">
           <span class="will-change-transform">--</span>
           <span>:</span>
           <span class="will-change-transform">--</span>
-          <span
-            class="ml-1 text-xl text-stone-500 opacity-80 will-change-transform"
-            >--</span
-          >
+          <span class="ml-1 text-xl text-stone-500 opacity-80 will-change-transform">--</span>
         </span>
       </template>
     </ClientOnly>
@@ -167,9 +152,7 @@ function removeFromTimer() {
             class="grid items-center justify-center rounded-sm bg-stone-300 px-6 py-2 text-lg font-semibold text-stone-600 shadow-xs transition outline-none focus-visible:ring-2"
             @click="toggleTimer"
           >
-            <span
-              class="col-start-1 row-start-1 flex animate-spin items-center justify-center"
-            >
+            <span class="col-start-1 row-start-1 flex animate-spin items-center justify-center">
               <LoaderPinwheelIcon />
             </span>
             <span class="invisible col-start-1 row-start-1">Start</span>

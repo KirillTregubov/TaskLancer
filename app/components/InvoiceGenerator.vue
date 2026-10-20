@@ -1,11 +1,7 @@
 <script lang="ts" setup>
 import { ChevronDown } from 'lucide-vue-next'
-import {
-  currencies,
-  currencyDigits,
-  formatMoney,
-  invoiceTotals
-} from '~/utils/currency'
+
+import { currencies, currencyDigits, formatMoney, invoiceTotals } from '~/utils/currency'
 
 const generateInvoiceNumber = () => {
   const randomNumber = Math.floor(10000 + Math.random() * 90000)
@@ -33,7 +29,7 @@ const {
   savePrefill,
   forgetPrefill,
   saveItemPrefill,
-  forgetItemPrefill
+  forgetItemPrefill,
 } = useInvoicePrefills(
   {
     invoiceNumber,
@@ -45,20 +41,18 @@ const {
     email,
     billToField,
     currency,
-    amountPaid
+    amountPaid,
   },
-  invoiceContents
+  invoiceContents,
 )
 const {
   recipients,
   ready: recipientsReady,
   isSaved: recipientIsSaved,
   saveRecipient,
-  unsaveRecipient
+  unsaveRecipient,
 } = useInvoiceRecipients(billToField)
-const selectedRecipient = computed(() =>
-  recipientIsSaved.value ? billToField.value.trim() : ''
-)
+const selectedRecipient = computed(() => (recipientIsSaved.value ? billToField.value.trim() : ''))
 const billToInput = useTemplateRef<HTMLTextAreaElement>('bill-to-input')
 const selectRecipient = (event: Event) => {
   const value = (event.target as HTMLSelectElement).value
@@ -83,9 +77,7 @@ const regenerateInvoiceNumber = () => {
 }
 
 const filteredInvoiceContents = computed(() => {
-  return invoiceContents.value.filter(
-    (item) => item.description.trim() || item.amount !== ''
-  )
+  return invoiceContents.value.filter((item) => item.description.trim() || item.amount !== '')
 })
 
 const summary = computed(() => {
@@ -94,9 +86,9 @@ const summary = computed(() => {
       totals: invoiceTotals(
         filteredInvoiceContents.value.map((item) => item.amount),
         amountPaid.value,
-        currency.value
+        currency.value,
       ),
-      error: ''
+      error: '',
     }
   } catch (error) {
     return { totals: null, error: (error as Error).message }
@@ -120,15 +112,12 @@ const printInvoice = () => {
 <template>
   <div class="max-w-xl rounded-md bg-stone-50 p-8">
     <p class="mb-4 text-sm text-stone-600">
-      Save a field to prefill it next time in this browser. Unsaved edits apply
-      only to this invoice.
+      Save a field to prefill it next time in this browser. Unsaved edits apply only to this
+      invoice.
     </p>
     <form class="space-y-4" @submit.prevent="printInvoice">
       <div>
-        <label
-          for="invoiceNumber"
-          class="mb-0.5 block text-sm font-medium text-stone-700"
-        >
+        <label for="invoiceNumber" class="mb-0.5 block text-sm font-medium text-stone-700">
           Invoice Number:
         </label>
         <div class="flex min-w-0 items-stretch gap-2">
@@ -165,10 +154,7 @@ const printInvoice = () => {
       </div>
 
       <div>
-        <label
-          for="date"
-          class="mb-0.5 block text-sm font-medium text-stone-700"
-        >
+        <label for="date" class="mb-0.5 block text-sm font-medium text-stone-700">
           Invoice Date:
         </label>
         <div class="flex min-w-0 items-stretch gap-2">
@@ -186,8 +172,7 @@ const printInvoice = () => {
             :label="'Invoice date'"
             :has-saved="savedPrefills['date'] !== undefined"
             :matches-saved="
-              savedPrefills['date'] !== undefined &&
-              savedPrefills['date'] === (date ?? '')
+              savedPrefills['date'] !== undefined && savedPrefills['date'] === (date ?? '')
             "
             @save="savePrefill('date', date)"
             @forget="forgetPrefill('date')"
@@ -197,10 +182,7 @@ const printInvoice = () => {
       </div>
 
       <div>
-        <label
-          for="companyName"
-          class="mb-0.5 block text-sm font-medium text-stone-700"
-        >
+        <label for="companyName" class="mb-0.5 block text-sm font-medium text-stone-700">
           Your Company Name:
         </label>
         <div class="flex min-w-0 items-stretch gap-2">
@@ -228,10 +210,7 @@ const printInvoice = () => {
       </div>
 
       <div>
-        <label
-          for="contactName"
-          class="mb-0.5 block text-sm font-medium text-stone-700"
-        >
+        <label for="contactName" class="mb-0.5 block text-sm font-medium text-stone-700">
           Your Name:
         </label>
         <div class="flex min-w-0 items-stretch gap-2">
@@ -259,10 +238,7 @@ const printInvoice = () => {
       </div>
 
       <div>
-        <label
-          for="address"
-          class="mb-0.5 block text-sm font-medium text-stone-700"
-        >
+        <label for="address" class="mb-0.5 block text-sm font-medium text-stone-700">
           Your Address:
         </label>
         <div class="flex min-w-0 items-stretch gap-2">
@@ -280,8 +256,7 @@ const printInvoice = () => {
             :label="'Address'"
             :has-saved="savedPrefills['address'] !== undefined"
             :matches-saved="
-              savedPrefills['address'] !== undefined &&
-              savedPrefills['address'] === (address ?? '')
+              savedPrefills['address'] !== undefined && savedPrefills['address'] === (address ?? '')
             "
             @save="savePrefill('address', address)"
             @forget="forgetPrefill('address')"
@@ -290,10 +265,7 @@ const printInvoice = () => {
       </div>
 
       <div>
-        <label
-          for="phone"
-          class="mb-0.5 block text-sm font-medium text-stone-700"
-        >
+        <label for="phone" class="mb-0.5 block text-sm font-medium text-stone-700">
           Your Phone Number:
         </label>
         <div class="flex min-w-0 items-stretch gap-2">
@@ -311,8 +283,7 @@ const printInvoice = () => {
             :label="'Phone number'"
             :has-saved="savedPrefills['phone'] !== undefined"
             :matches-saved="
-              savedPrefills['phone'] !== undefined &&
-              savedPrefills['phone'] === (phone ?? '')
+              savedPrefills['phone'] !== undefined && savedPrefills['phone'] === (phone ?? '')
             "
             @save="savePrefill('phone', phone)"
             @forget="forgetPrefill('phone')"
@@ -321,10 +292,7 @@ const printInvoice = () => {
       </div>
 
       <div>
-        <label
-          for="email"
-          class="mb-0.5 block text-sm font-medium text-stone-700"
-        >
+        <label for="email" class="mb-0.5 block text-sm font-medium text-stone-700">
           Your Email Address:
         </label>
         <div class="flex min-w-0 items-stretch gap-2">
@@ -342,8 +310,7 @@ const printInvoice = () => {
             :label="'Email address'"
             :has-saved="savedPrefills['email'] !== undefined"
             :matches-saved="
-              savedPrefills['email'] !== undefined &&
-              savedPrefills['email'] === (email ?? '')
+              savedPrefills['email'] !== undefined && savedPrefills['email'] === (email ?? '')
             "
             @save="savePrefill('email', email)"
             @forget="forgetPrefill('email')"
@@ -352,10 +319,7 @@ const printInvoice = () => {
       </div>
 
       <div>
-        <label
-          for="billToField"
-          class="mb-0.5 block text-sm font-medium text-stone-700"
-        >
+        <label for="billToField" class="mb-0.5 block text-sm font-medium text-stone-700">
           Bill To:
         </label>
         <div class="flex min-w-0 items-stretch gap-2">
@@ -379,10 +343,7 @@ const printInvoice = () => {
           />
         </div>
         <div class="mt-2">
-          <label
-            for="saved-recipient"
-            class="mb-0.5 block text-sm font-medium text-stone-700"
-          >
+          <label for="saved-recipient" class="mb-0.5 block text-sm font-medium text-stone-700">
             Saved recipients:
           </label>
           <div class="relative">
@@ -395,11 +356,7 @@ const printInvoice = () => {
               @change="selectRecipient"
             >
               <option value="">Create New Recipient</option>
-              <option
-                v-for="recipient in recipients"
-                :key="recipient"
-                :value="recipient"
-              >
+              <option v-for="recipient in recipients" :key="recipient" :value="recipient">
                 {{
                   recipient
                     .split(/\r?\n/)
@@ -419,9 +376,7 @@ const printInvoice = () => {
       </div>
 
       <div>
-        <label class="mb-0.5 block text-sm font-medium text-stone-700">
-          Invoice Items:
-        </label>
+        <label class="mb-0.5 block text-sm font-medium text-stone-700"> Invoice Items: </label>
         <div class="mb-2 space-y-2">
           <div
             v-for="(item, index) in invoiceContents"
@@ -457,8 +412,7 @@ const printInvoice = () => {
                   savedPrefills[`items.${index}.amount`] !== undefined
                 "
                 :matches-saved="
-                  savedPrefills[`items.${index}.description`] ===
-                    item.description &&
+                  savedPrefills[`items.${index}.description`] === item.description &&
                   savedPrefills[`items.${index}.amount`] === item.amount
                 "
                 @save="saveItemPrefill(index, item)"
@@ -485,9 +439,7 @@ const printInvoice = () => {
       </div>
 
       <div>
-        <label
-          for="currency"
-          class="mb-0.5 block text-sm font-medium text-stone-700"
+        <label for="currency" class="mb-0.5 block text-sm font-medium text-stone-700"
           >Currency:</label
         >
         <div class="flex min-w-0 items-stretch gap-2">
@@ -497,11 +449,7 @@ const printInvoice = () => {
               v-model="currency"
               class="block min-h-10 w-full appearance-none rounded-md bg-stone-300 py-2 pr-10 pl-3 font-medium text-stone-700"
             >
-              <option
-                v-for="[code, name] in currencies"
-                :key="code"
-                :value="code"
-              >
+              <option v-for="[code, name] in currencies" :key="code" :value="code">
                 {{ code }} - {{ name }}
               </option>
             </select>
@@ -523,16 +471,13 @@ const printInvoice = () => {
           />
         </div>
         <p class="mt-1 text-sm text-stone-600">
-          Amounts are in {{ currency }} ({{ digits }} decimal places). Changing
-          currency does not convert amounts.
+          Amounts are in {{ currency }} ({{ digits }} decimal places). Changing currency does not
+          convert amounts.
         </p>
       </div>
 
       <div>
-        <label
-          for="amountPaid"
-          class="mb-0.5 block text-sm font-medium text-stone-700"
-        >
+        <label for="amountPaid" class="mb-0.5 block text-sm font-medium text-stone-700">
           Amount Paid:
         </label>
         <div class="flex min-w-0 items-stretch gap-2">
@@ -568,27 +513,18 @@ const printInvoice = () => {
         aria-live="polite"
       >
         <div class="flex justify-between gap-4">
-          <span>Total</span
-          ><strong>{{ formatMoney(summary.totals.total, currency) }}</strong>
+          <span>Total</span><strong>{{ formatMoney(summary.totals.total, currency) }}</strong>
         </div>
         <div class="flex justify-between gap-4">
           <span>Amount paid</span
           ><span>{{ formatMoney(summary.totals.amountPaid, currency) }}</span>
         </div>
         <div class="flex justify-between gap-4">
-          <span>{{
-            summary.totals.balance < 0 ? 'Credit balance' : 'Balance due'
-          }}</span
-          ><strong>{{
-            formatMoney(Math.abs(summary.totals.balance), currency)
-          }}</strong>
+          <span>{{ summary.totals.balance < 0 ? 'Credit balance' : 'Balance due' }}</span
+          ><strong>{{ formatMoney(Math.abs(summary.totals.balance), currency) }}</strong>
         </div>
       </div>
-      <p
-        v-if="summary.error || printError"
-        role="alert"
-        class="text-sm text-red-700"
-      >
+      <p v-if="summary.error || printError" role="alert" class="text-sm text-red-700">
         {{ summary.error || printError }}
       </p>
 

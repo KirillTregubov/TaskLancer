@@ -9,7 +9,7 @@ export const prefillFields = [
   'email',
   'billToField',
   'currency',
-  'amountPaid'
+  'amountPaid',
 ] as const
 
 export function isPrefillKey(key: string): boolean {
@@ -19,9 +19,7 @@ export function isPrefillKey(key: string): boolean {
   )
 }
 
-export function readPrefills(
-  storage: Pick<Storage, 'getItem'>
-): Record<string, string> {
+export function readPrefills(storage: Pick<Storage, 'getItem'>): Record<string, string> {
   const raw = storage.getItem(PREFILLS_KEY)
   if (!raw) return {}
   let parsed: unknown
@@ -32,15 +30,13 @@ export function readPrefills(
   }
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {}
   return Object.fromEntries(
-    Object.entries(parsed).filter(
-      ([key, value]) => isPrefillKey(key) && typeof value === 'string'
-    )
+    Object.entries(parsed).filter(([key, value]) => isPrefillKey(key) && typeof value === 'string'),
   )
 }
 
 export function writePrefills(
   storage: Pick<Storage, 'getItem' | 'setItem'>,
-  updates: Record<string, string | undefined>
+  updates: Record<string, string | undefined>,
 ): Record<string, string> {
   if (Object.keys(updates).some((key) => !isPrefillKey(key)))
     throw new Error('Unknown prefill field')
@@ -49,9 +45,7 @@ export function writePrefills(
     if (value !== undefined) updated[key] = value
   }
   const saved = Object.fromEntries(
-    Object.entries(updated).filter(
-      ([key]) => !(key in updates) || updates[key] !== undefined
-    )
+    Object.entries(updated).filter(([key]) => !(key in updates) || updates[key] !== undefined),
   )
   storage.setItem(PREFILLS_KEY, JSON.stringify(saved))
   return saved
@@ -60,7 +54,7 @@ export function writePrefills(
 export function writePrefill(
   storage: Pick<Storage, 'getItem' | 'setItem'>,
   key: string,
-  value: string | undefined
+  value: string | undefined,
 ): Record<string, string> {
   return writePrefills(storage, { [key]: value })
 }

@@ -1,10 +1,7 @@
 import { describe, expect, test } from 'bun:test'
+
 import { PREFILLS_KEY } from '../app/utils/prefills'
-import {
-  RECIPIENTS_KEY,
-  readRecipients,
-  writeRecipient
-} from '../app/utils/recipients'
+import { RECIPIENTS_KEY, readRecipients, writeRecipient } from '../app/utils/recipients'
 
 function storage(initial: Record<string, string> = {}) {
   const values = new Map(Object.entries(initial))
@@ -12,7 +9,7 @@ function storage(initial: Record<string, string> = {}) {
     getItem: (key: string) => values.get(key) ?? null,
     setItem: (key: string, value: string) => {
       values.set(key, value)
-    }
+    },
   }
 }
 
@@ -34,8 +31,8 @@ describe('saved recipients', () => {
     const store = storage({
       [PREFILLS_KEY]: JSON.stringify({
         billToField: 'Legacy Client',
-        companyName: 'My Company'
-      })
+        companyName: 'My Company',
+      }),
     })
     expect(readRecipients(store)).toEqual(['Legacy Client'])
     writeRecipient(store, 'New Client', true)
@@ -45,7 +42,7 @@ describe('saved recipients', () => {
     expect(readRecipients(store)).toEqual([])
     expect(JSON.parse(store.getItem(PREFILLS_KEY)!)).toEqual({
       billToField: 'Legacy Client',
-      companyName: 'My Company'
+      companyName: 'My Company',
     })
   })
 
@@ -54,9 +51,7 @@ describe('saved recipients', () => {
       expect(readRecipients(storage({ [RECIPIENTS_KEY]: raw }))).toEqual([])
     }
     expect(
-      readRecipients(
-        storage({ [RECIPIENTS_KEY]: JSON.stringify([' A ', '', 3, null, 'A']) })
-      )
+      readRecipients(storage({ [RECIPIENTS_KEY]: JSON.stringify([' A ', '', 3, null, 'A']) })),
     ).toEqual(['A'])
     const store = storage()
     expect(() =>
@@ -65,11 +60,11 @@ describe('saved recipients', () => {
           getItem: store.getItem,
           setItem: () => {
             throw new Error('quota')
-          }
+          },
         },
         'Client',
-        true
-      )
+        true,
+      ),
     ).toThrow('quota')
     expect(readRecipients(store)).toEqual([])
   })

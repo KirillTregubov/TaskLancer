@@ -1,9 +1,5 @@
-import {
-  RECIPIENTS_KEY,
-  readRecipients,
-  writeRecipient
-} from '~/utils/recipients'
 import { readPrefills, writePrefill } from '~/utils/prefills'
+import { RECIPIENTS_KEY, readRecipients, writeRecipient } from '~/utils/recipients'
 
 export function useInvoiceRecipients(field: Ref<string>) {
   const recipients = ref<string[]>([])
@@ -21,9 +17,7 @@ export function useInvoiceRecipients(field: Ref<string>) {
         writePrefill(localStorage, 'billToField', undefined)
       }
     } catch {
-      toast.error(
-        'Saved recipients could not be loaded. Browser storage may be unavailable.'
-      )
+      toast.error('Saved recipients could not be loaded. Browser storage may be unavailable.')
     } finally {
       ready.value = true
     }
@@ -38,9 +32,7 @@ export function useInvoiceRecipients(field: Ref<string>) {
       recipients.value = writeRecipient(localStorage, field.value, true)
       toast.success('Recipient saved for this browser.')
     } catch {
-      toast.error(
-        'Could not save the recipient. Browser storage may be full or unavailable.'
-      )
+      toast.error('Could not save the recipient. Browser storage may be full or unavailable.')
     }
   }
   const unsaveRecipient = () => {

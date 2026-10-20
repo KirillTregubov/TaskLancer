@@ -7,7 +7,7 @@ export default function () {
   // Private state stored in localStorage
   const timerStorage = useLocalStorage<TimerState>('timer', {
     elapsedTime: 0,
-    startDate: null
+    startDate: null,
   })
 
   // Exposed state
@@ -15,7 +15,7 @@ export default function () {
     isRunning: computed(() => Boolean(timerStorage.value.startDate)),
     elapsedTime: timerStorage.value.startDate
       ? Date.now() - timerStorage.value.startDate
-      : timerStorage.value.elapsedTime
+      : timerStorage.value.elapsedTime,
   })
 
   let interval: ReturnType<typeof setInterval> | undefined = undefined
@@ -25,8 +25,7 @@ export default function () {
 
     if (timerStorage.value.startDate != null) {
       timer.elapsedTime =
-        timerStorage.value.elapsedTime +
-        (Date.now() - timerStorage.value.startDate)
+        timerStorage.value.elapsedTime + (Date.now() - timerStorage.value.startDate)
     } else {
       timer.elapsedTime = timerStorage.value.elapsedTime
       timerStorage.value.startDate = Date.now()
@@ -40,8 +39,7 @@ export default function () {
   function stopTimer() {
     if (!timer.isRunning) throw new Error('Timer is already stopped')
 
-    timerStorage.value.elapsedTime +=
-      Date.now() - (timerStorage.value.startDate as number)
+    timerStorage.value.elapsedTime += Date.now() - (timerStorage.value.startDate as number)
     timer.elapsedTime = timerStorage.value.elapsedTime // TODO: this can cause the timer to adjust unexpectedly
     timerStorage.value.startDate = null
     if (interval) clearInterval(interval)
@@ -105,6 +103,6 @@ export default function () {
     timer,
     toggleTimer,
     resetTimer,
-    modifyTimer
+    modifyTimer,
   }
 }

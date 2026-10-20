@@ -2,8 +2,7 @@
 useSeoMeta({
   title: 'TaskLancer',
   ogTitle: 'TaskLancer',
-  description:
-    'Track your time and create printable invoices in multiple currencies.'
+  description: 'Track your time and create printable invoices in multiple currencies.',
 })
 </script>
 
