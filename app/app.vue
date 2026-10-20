@@ -12,8 +12,8 @@ const runtimeConfig = useRuntimeConfig()
       <h1 class="text-xl font-medium text-stone-950">TaskLancer</h1>
     </nav>
     <NuxtPage />
-    <footer class="mt-auto text-center">
-      Made with ❤️ by <span className="font-bold">Kirill Tregubov</span>.
+    <footer class="mt-auto pt-6 text-center">
+      Made with ❤️ by <span class="font-bold">Kirill Tregubov</span>.
       <span class="whitespace-nowrap"
         >This site is
         <a

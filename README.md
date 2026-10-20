@@ -1,75 +1,40 @@
-# Nuxt Minimal Starter
+# TaskLancer
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Track work time and generate printable invoices with currency-aware totals and payments.
 
-## Setup
+## Development
 
-Make sure to install dependencies:
+Use Node.js 26.x and Bun:
 
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
+```sh
+bun install --frozen-lockfile
 bun run dev
 ```
 
-## Production
+Open the URL printed by Nuxt. To use a specific port, run `bun run dev --port 3018`.
 
-Build the application for production:
+## Checks
 
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
+```sh
+bun test
+bun run typecheck
+bunx eslint .
 bun run build
 ```
 
-Locally preview production build:
+Stop the dev server before building: Nuxt's development and production commands share generated files.
 
-```bash
-# npm
-npm run preview
+Type checking follows [Nuxt's TypeScript guidance](https://nuxt.com/docs/4.x/guide/concepts/typescript):
+`bun run typecheck` runs `nuxt typecheck` with `vue-tsc`. TypeScript is pinned to
+the 6.0 series for compatibility with the compiler API used by the current Vue
+and ESLint tooling. The root `tsconfig.json` references Nuxt's generated app,
+server, shared, and Node configurations.
 
-# pnpm
-pnpm preview
+## Invoices
 
-# yarn
-yarn preview
+Select the invoice currency before entering amounts. Currency codes identify amounts
+in the form and on the printed invoice. Changing currency does not convert values.
+The currency determines decimal precision; totals use integer minor units to preserve
+cents. Negative line items represent discounts, and overpayments show a credit balance.
 
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Print Invoice opens the browser's print dialog, where you can print or save as PDF.

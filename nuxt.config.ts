@@ -24,10 +24,7 @@ export default defineNuxtConfig({
     }
   },
   vite: {
-    plugins: [tailwindcss()],
-    build: {
-      cssMinify: false // TODO: Fix when https://github.com/tailwindlabs/tailwindcss/issues/15278 and https://github.com/vitejs/vite/issues/18974 are resolved
-    }
+    plugins: [tailwindcss()]
   },
   imports: {
     presets: [
