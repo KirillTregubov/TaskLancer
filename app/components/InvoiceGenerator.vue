@@ -21,7 +21,7 @@ const phone = ref('')
 const email = ref('')
 const billToField = ref('')
 const invoiceContents = ref([{ description: '', amount: '' }])
-const currency = ref('USD')
+const currency = ref('CAD')
 const amountPaid = ref('0')
 const {
   savedPrefills,
